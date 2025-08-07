@@ -1,0 +1,22 @@
+﻿@model Art_Touch.ViewModels.HeroImageViewModel
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+}
+<h2>Edit Hero Image</h2>
+
+@if (!string.IsNullOrEmpty(Model.ExistingImageUrl))
+{
+    <div>
+        <p>Current Image:</p>
+        <img src="@Model.ExistingImageUrl" style="max-width:300px;" />
+    </div>
+}
+
+<form asp-action="EditHeroImage" enctype="multipart/form-data" method="post">
+    <div class="form-group">
+        <label>Upload New Image</label>
+        <input asp-for="ImageFile" type="file" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-success">Update</button>
+</form>

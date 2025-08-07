@@ -1,0 +1,33 @@
+﻿@model Art_Touch.ViewModels.CategoryViewModel
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+}
+<form asp-action="EditCategory" method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="Id" />
+
+    <div class="form-group">
+        <label asp-for="Name"></label>
+        <input asp-for="Name" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Description"></label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ImageFile">Category Image</label>
+        <input asp-for="ImageFile" type="file" class="form-control" />
+    </div>
+
+    @if (!string.IsNullOrEmpty(Model.ExistingImageUrl))
+    {
+        <div>
+            <p>Current Image:</p>
+            <img src="@Model.ExistingImageUrl" alt="Category Image" style="width: 100px;" />
+        </div>
+    }
+
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+</form>

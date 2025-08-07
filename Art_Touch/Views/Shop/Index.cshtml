@@ -1,0 +1,720 @@
+@using DAL.Data.Models
+@{
+    ViewData["Title"] = "Art Touch Gallery - Women's Fashion";
+    Layout = "~/Views/Shared/_ShopLayout.cshtml";
+}
+
+<!-- Hero Section -->
+@{
+    var heroImage = ViewBag.HeroImageUrl ?? "/images/hero/default.jpg";
+}
+
+<section class="hero-section">
+    <div class="hero-image">
+        <img src="@heroImage" alt="Summer Collection" class="background-full" />
+    </div>
+
+    <div class="hero-content">
+        <h1>Summer Collection 2025</h1>
+        <p>Discover the season's most coveted styles. Effortless elegance for the modern woman.</p>
+        <div class="hero-buttons">
+            <a href="@Url.Action("Products", "Shop")" class="btn btn-primary">Shop Now</a>
+            <a href="@Url.Action("NewArrivals", "Shop")" class="btn btn-light">View Lookbook</a>
+        </div>
+    </div>
+</section>
+
+<style>
+    /* Hero Section Styles */
+    .hero-section {
+        position: relative;
+        height: 100vh;
+        min-height: 600px;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .hero-image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+    }
+
+        .hero-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.05) 100%);
+            z-index: 2;
+        }
+
+    .background-full {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+        /* Removed filter for clarity */
+        transition: transform 0.3s ease;
+    }
+
+    .hero-section:hover .background-full {
+        transform: scale(1.02);
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 3;
+        text-align: center;
+        color: white;
+        max-width: 600px;
+        padding: 0 20px;
+        animation: fadeInUp 1s ease-out;
+    }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+        }
+
+        .hero-content p {
+            font-size: 1.25rem;
+            margin-bottom: 2.5rem;
+            opacity: 0.95;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            font-weight: 300;
+            line-height: 1.6;
+        }
+
+    .hero-buttons {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .btn {
+        display: inline-block;
+        padding: 14px 32px;
+        text-decoration: none;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        border: 2px solid transparent;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #ff6b6b, #ff8e53);
+        color: white;
+        box-shadow: 0 8px 25px rgba(255, 107, 107, 0.3);
+    }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(255, 107, 107, 0.4);
+            background: linear-gradient(135deg, #ff5252, #ff7043);
+        }
+
+    .btn-light {
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        backdrop-filter: blur(10px);
+    }
+
+        .btn-light:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(255, 255, 255, 0.1);
+        }
+
+    @@keyframes fadeInUp {
+        from
+
+    {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    }
+
+    /* Responsive Design */
+    @@media (max-width: 768px) {
+        .hero-section
+
+    {
+        min-height: 500px;
+    }
+
+    .hero-content h1 {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .hero-content p {
+        font-size: 1.1rem;
+        margin-bottom: 2rem;
+    }
+
+    .hero-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .btn {
+        width: 100%;
+        max-width: 280px;
+        padding: 12px 24px;
+        font-size: 0.95rem;
+    }
+
+    }
+
+    @@media (max-width: 480px) {
+        .hero-content
+
+    {
+        padding: 0 15px;
+    }
+
+    .hero-content h1 {
+        font-size: 2rem;
+    }
+
+    .hero-content p {
+        font-size: 1rem;
+    }
+
+    }
+    </style>
+
+
+    <!-- Slick CSS -->
+<style>
+    .category-slider-section {
+        margin-top: 50px;
+    }
+
+    .category-slider {
+        display: flex;
+        overflow-x: auto;
+        gap: 16px;
+        scroll-snap-type: x mandatory;
+        padding-bottom: 10px;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .category-item {
+        flex: 0 0 auto;
+        width: 280px;
+        scroll-snap-align: start;
+        text-align: center;
+    }
+
+    .category-item img {
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        object-fit: cover;
+        border-radius: 12px;
+        transition: transform 0.3s ease;
+    }
+
+    .category-item:hover img {
+        transform: scale(1.05);
+    }
+
+    @@media (max-width: 768px) {
+        .category-item {
+            width: 140px;
+        }
+    }
+</style>
+
+
+<section class="category-slider-section">
+    <div class="container">
+        <h2 class="text-center mb-4">Explore Categories</h2>
+        <div class="category-slider">
+            @foreach (var category in ViewBag.Categories as List<Category>)
+            {
+                <div class="category-item">
+                    <a href="@Url.Action("ProductsByCategory", "Shop", new { categoryId = category.Id })">
+                        <img src="@category.ImageUrl" alt="@category.Name" />
+                        <h5 class="mt-2">@category.Name</h5>
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
+
+@{
+    #region slider
+
+    @* <!-- New Arrivals Section -->
+<section class="new-arrivals-section">
+    <div class="container">
+        <div class="section-header">
+            <h2>New Arrivals</h2>
+            <p>The latest additions to our collection, featuring this season's must-have pieces.</p>
+        </div>
+
+        <div class="products-grid">
+            @if (ViewBag.NewArrivals != null)
+            {
+                var newArrivals = ViewBag.NewArrivals as List<DAL.Data.Models.Product>;
+                if (newArrivals != null)
+                {
+                    foreach (var product in newArrivals.Take(4))
+                    {
+                    <div class="product-card">
+                        <div class="product-image">
+cursor/fix-product-details-and-update-branding-fb72
+                            @if (product.IsNewArrival)
+                            {
+                                <span class="product-badge new">New</span>
+                            }
+                            @if (product.IsBestseller)
+                            {
+                                <span class="product-badge bestseller">Best Seller</span>
+                            }
+                            <img src="@(product.Images != null && product.Images.Count > 0 ? product.Images.First().ImageUrl : "/images/placeholder-dress.jpg")" 
+
+                            <span class="product-badge new">New</span>
+                                                            <img src="@(product.Images != null && product.Images.Count > 0 ? product.Images.First().ImageUrl : "/images/placeholder-dress.jpg")" 
+ master
+                                 alt="@product.Name" 
+                                 onerror="this.src='/images/placeholder-dress.jpg'; this.onerror=null;" />
+                            <div class="product-overlay">
+                                <a href="@Url.Action("ProductDetails", "Shop", new { id = product.Id })" class="btn-view-details">
+                                    <i class="fas fa-eye"></i> View Details
+                                </a>
+                            </div>
+                        </div>
+                        <div class="product-info">
+                            <h3>@product.Name</h3>
+                            <p class="product-category">@(string.IsNullOrEmpty(product.Description) ? product.Category?.Name : product.Description)</p>
+                            <div class="product-price">
+                                @if (product.DiscountPrice.HasValue)
+                                {
+                                    <span class="price-current">$@product.DiscountPrice.Value.ToString("F2")</span>
+                                    <span class="price-original">$@product.OriginalPrice.ToString("F2")</span>
+                                }
+                                else
+                                {
+                                    <span class="price-current">$@product.OriginalPrice.ToString("F2")</span>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+                }
+            }
+            else
+            {
+                <!-- Placeholder products -->
+                <div class="product-card">
+                    <div class="product-image">
+                        <span class="product-badge new">New</span>
+                        <img src="/images/placeholder-dress.jpg" alt="Lace Detail Blouse" />
+                        <div class="product-overlay">
+                            <a href="#" class="btn btn-view">View Details</a>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <h3>Lace Detail Blouse</h3>
+                        <p class="product-category">Elegant white blouse with delicate lace details</p>
+                        <div class="product-price">
+                            <span class="price-current">$49.99</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-image">
+                        <span class="product-badge new">New</span>
+                        <img src="/images/placeholder-dress.jpg" alt="Floral Midi Dress" />
+                        <div class="product-overlay">
+                            <a href="#" class="btn btn-view">View Details</a>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <h3>Floral Midi Dress</h3>
+                        <p class="product-category">Stunning floral pattern with flattering silhouette</p>
+                        <div class="product-price">
+                            <span class="price-current">$79.99</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-image">
+                        <span class="product-badge new">New</span>
+                        <img src="/images/placeholder-dress.jpg" alt="Wide Leg Trousers" />
+                        <div class="product-overlay">
+                            <a href="#" class="btn btn-view">View Details</a>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <h3>Wide Leg Trousers</h3>
+                        <p class="product-category">High-waisted design with flowing silhouette</p>
+                        <div class="product-price">
+                            <span class="price-current">$65.99</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-image">
+                        <span class="product-badge new">New</span>
+                        <img src="/images/placeholder-dress.jpg" alt="Pearl Button Cardigan" />
+                        <div class="product-overlay">
+                            <a href="#" class="btn btn-view">View Details</a>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <h3>Pearl Button Cardigan</h3>
+                        <p class="product-category">Soft knit with elegant pearl button details</p>
+                        <div class="product-price">
+                            <span class="price-current">$54.99</span>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="section-footer">
+            <a href="@Url.Action("NewArrivals", "Shop")" class="btn btn-outline">View All New Arrivals</a>
+        </div>
+    </div>
+</section>
+ *@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    @* <div class="category-slider">
+    @foreach (var category in ViewBag.Categories)
+    {
+        <div class="category-item text-center">
+            <a asp-controller="Product" asp-action="CategoryProducts" asp-route-id="@category.Id">
+                <img src="@Url.Content("~/images/categories/" + category.ImageUrl)" alt="@category.Name" style="width: 150px; height: 150px; object-fit: cover;" />
+                <h5 class="mt-2">@category.Name</h5>
+            </a>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.category-slider').slick({
+                slidesToShow: 4,
+                slidesToScroll: 1,
+                autoplay: true,
+                autoplaySpeed: 3000,
+                arrows: true,
+                dots: false,
+                responsive: [
+                    {
+                        breakpoint: 768,
+                        settings: { slidesToShow: 2 }
+                    },
+                    {
+                        breakpoint: 480,
+                        settings: { slidesToShow: 1 }
+                    }
+                ]
+            });
+        });
+    </script>
+}
+ *@
+    #endregion
+}
+
+<!-- New Arrivals Section -->
+
+<section class="new-arrivals-section">
+    <div class="container">
+        <div class="section-header">
+            <h2>New Arrivals</h2>
+            <p>The latest additions to our collection, featuring this season's must-have pieces.</p>
+        </div>
+
+        <div class="products-grid">
+            @if (ViewBag.NewArrivals != null)
+            {
+                var newArrivals = ViewBag.NewArrivals as List<DAL.Data.Models.Product>;
+                if (newArrivals != null)
+                {
+                    foreach (var product in newArrivals.Take(4))
+                    {
+                        <div class="product-card">
+                            <div class="product-image">
+                                @if (product.IsNewArrival)
+                                {
+                                    <span class="product-badge new">New</span>
+                                }
+                                @if (product.IsBestseller)
+                                {
+                                    <span class="product-badge bestseller">Best Seller</span>
+                                }
+
+                                <img src="@(product.Images != null && product.Images.Count > 0 ? product.Images.First().ImageUrl : "/images/placeholder-dress.jpg")"
+                                     alt="@product.Name"
+                                     onerror="this.src='/images/placeholder-dress.jpg'; this.onerror=null;" />
+
+                                <div class="product-overlay">
+                                    <a href="@Url.Action("ProductDetails", "Shop", new { id = product.Id })" class="btn-view-details">
+                                        <i class="fas fa-eye"></i> View Details
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="product-info">
+                                <h3>@product.Name</h3>
+                                <p class="product-category">
+                                    @(string.IsNullOrEmpty(product.Description) ? product.Category?.Name : product.Description)
+                                </p>
+                                <div class="product-price">
+                                    @if (product.DiscountPrice.HasValue)
+                                    {
+                                        <span class="price-current">$@product.DiscountPrice.Value.ToString("F2")</span>
+                                        <span class="price-original">$@product.OriginalPrice.ToString("F2")</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="price-current">$@product.OriginalPrice.ToString("F2")</span>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+            }
+            else
+            {
+                <text>
+                    <!-- Placeholder products -->
+                    @foreach (var placeholder in new[] {
+                new { Name = "Lace Detail Blouse", Desc = "Elegant white blouse with delicate lace details", Price = "49.99" },
+                new { Name = "Floral Midi Dress", Desc = "Stunning floral pattern with flattering silhouette", Price = "79.99" },
+                new { Name = "Wide Leg Trousers", Desc = "High-waisted design with flowing silhouette", Price = "65.99" },
+                new { Name = "Pearl Button Cardigan", Desc = "Soft knit with elegant pearl button details", Price = "54.99" }
+                })
+                    {
+                        <div class="product-card">
+                            <div class="product-image">
+                                <span class="product-badge new">New</span>
+                                <img src="/images/placeholder-dress.jpg" alt="@placeholder.Name" />
+                                <div class="product-overlay">
+                                    <a href="#" class="btn btn-view">View Details</a>
+                                </div>
+                            </div>
+                            <div class="product-info">
+                                <h3>@placeholder.Name</h3>
+                                <p class="product-category">@placeholder.Desc</p>
+                                <div class="product-price">
+                                    <span class="price-current">$@placeholder.Price</span>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </text>
+            }
+        </div>
+
+        <div class="section-footer">
+            <a href="@Url.Action("NewArrivals", "Shop")" class="btn btn-outline">View All New Arrivals</a>
+        </div>
+    </div>
+</section>
+
+<!-- Best Sellers Section -->
+<section class="best-sellers-section">
+    <div class="container">
+        <div class="section-header">
+            <h2>Best Sellers</h2>
+            <p>Our most loved pieces that customers can't get enough of.</p>
+        </div>
+
+        <div class="products-grid">
+            @if (ViewBag.BestSellers != null)
+            {
+                var bestSellers = ViewBag.BestSellers as List<DAL.Data.Models.Product>;
+                if (bestSellers != null)
+                {
+                    foreach (var product in bestSellers.Take(4))
+                    {
+                        <div class="product-card">
+                            <div class="product-image">
+                                @if (product.IsNewArrival)
+                                {
+                                    <span class="product-badge new">New</span>
+                                }
+                                @if (product.IsBestseller)
+                                {
+                                    <span class="product-badge bestseller">Best Seller</span>
+                                }
+
+                                <img src="@(product.Images != null && product.Images.Count > 0 ? product.Images.First().ImageUrl : "/images/placeholder-dress.jpg")"
+                                     alt="@product.Name"
+                                     onerror="this.src='/images/placeholder-dress.jpg'; this.onerror=null;" />
+
+                                <div class="product-overlay">
+                                    <a href="@Url.Action("ProductDetails", "Shop", new { id = product.Id })" class="btn-view-details">
+                                        <i class="fas fa-eye"></i> View Details
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="product-info">
+                                <h3>@product.Name</h3>
+                                <p class="product-category">
+                                    @(string.IsNullOrEmpty(product.Description) ? product.Category?.Name : product.Description)
+                                </p>
+                                <div class="product-price">
+                                    @if (product.DiscountPrice.HasValue)
+                                    {
+                                        <span class="price-current">$@product.DiscountPrice.Value.ToString("F2")</span>
+                                        <span class="price-original">$@product.OriginalPrice.ToString("F2")</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="price-current">$@product.OriginalPrice.ToString("F2")</span>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+            }
+            else
+            {
+                <text>
+                    <!-- Placeholder products -->
+                    @foreach (var placeholder in new[] {
+                new { Name = "Elegant Maxi Dress", Desc = "Flowy and flattering for every figure", Price = "99.99" },
+                new { Name = "Slim Fit Blazer", Desc = "Tailored to perfection for formal occasions", Price = "120.00" },
+                new { Name = "Classic Denim Jacket", Desc = "A timeless piece for any season", Price = "75.50" },
+                new { Name = "Knitted Turtleneck", Desc = "Warm and stylish for chilly days", Price = "49.99" }
+                })
+                    {
+                        <div class="product-card">
+                            <div class="product-image">
+                                <span class="product-badge bestseller">Best Seller</span>
+                                <img src="/images/placeholder-dress.jpg" alt="@placeholder.Name" />
+                                <div class="product-overlay">
+                                    <a href="#" class="btn btn-view">View Details</a>
+                                </div>
+                            </div>
+                            <div class="product-info">
+                                <h3>@placeholder.Name</h3>
+                                <p class="product-category">@placeholder.Desc</p>
+                                <div class="product-price">
+                                    <span class="price-current">$@placeholder.Price</span>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </text>
+            }
+        </div>
+
+        <div class="section-footer">
+            <a href="@Url.Action("BestSellers", "Shop")" class="btn btn-outline">View All Best Sellers</a>
+        </div>
+    </div>
+</section>
+
+
+<!-- Instagram Section -->
+<section class="instagram-section">
+    <div class="container">
+        <div class="section-header">
+            <h2>Follow Us on Instagram</h2>
+                            <p>Tag your photos with #ArtTouchStyle for a chance to be featured!</p>
+        </div>
+        
+        <div class="instagram-grid">
+            <div class="instagram-item">
+                <img src="/images/instagram-1.jpg" alt="Instagram Post" />
+            </div>
+            <div class="instagram-item">
+                <img src="/images/instagram-2.jpg" alt="Instagram Post" />
+            </div>
+            <div class="instagram-item">
+                <img src="/images/instagram-3.jpg" alt="Instagram Post" />
+            </div>
+            <div class="instagram-item">
+                <img src="/images/instagram-4.jpg" alt="Instagram Post" />
+            </div>
+            <div class="instagram-item">
+                <img src="/images/instagram-5.jpg" alt="Instagram Post" />
+            </div>
+            <div class="instagram-item">
+                <img src="/images/instagram-6.jpg" alt="Instagram Post" />
+            </div>
+        </div>
+        
+        <div class="section-footer">
+                            <a href="#" class="btn btn-instagram">Follow @@ArtTouchGallery</a>
+        </div>
+    </div>
+</section>
+

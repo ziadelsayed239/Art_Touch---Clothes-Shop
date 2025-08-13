@@ -229,265 +229,380 @@
 
     <!-- Slick CSS -->
 <style>
-    .category-slider-section {
-        margin-top: 50px;
-    }
-
-    .category-slider {
-        display: flex;
-        overflow-x: auto;
-        gap: 16px;
-        scroll-snap-type: x mandatory;
-        padding-bottom: 10px;
-        -webkit-overflow-scrolling: touch;
-    }
-
-    .category-item {
-        flex: 0 0 auto;
-        width: 280px;
-        scroll-snap-align: start;
-        text-align: center;
-    }
-
-    .category-item img {
-        width: 100%;
-        aspect-ratio: 1 / 1;
-        object-fit: cover;
-        border-radius: 12px;
-        transition: transform 0.3s ease;
-    }
-
-    .category-item:hover img {
-        transform: scale(1.05);
-    }
-
-    @@media (max-width: 768px) {
-        .category-item {
-            width: 140px;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-    }
-</style>
 
 
-<section class="category-slider-section">
-    <div class="container">
-        <h2 class="text-center mb-4">Explore Categories</h2>
-        <div class="category-slider">
-            @foreach (var category in ViewBag.Categories as List<Category>)
-            {
-                <div class="category-item">
-                    <a href="@Url.Action("ProductsByCategory", "Shop", new { categoryId = category.Id })">
-                        <img src="@category.ImageUrl" alt="@category.Name" />
-                        <h5 class="mt-2">@category.Name</h5>
-                    </a>
-                </div>
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .category-slider-section {
+            margin-top: 50px;
+            position: relative;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+            position: relative;
+        }
+
+        .section-title h2 {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ff6b6b, #4ecdc4, #45b7d1, #f9ca24);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 4s ease-in-out infinite;
+            text-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, #ff6b6b, #4ecdc4);
+            border-radius: 2px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @@keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        @@keyframes pulse {
+            0%, 100% { transform: translateX(-50%) scaleX(1); opacity: 1; }
+            50% { transform: translateX(-50%) scaleX(1.2); opacity: 0.8; }
+        }
+
+        .category-slider {
+            display: flex;
+            overflow-x: auto;
+            gap: 30px;
+            scroll-snap-type: x mandatory;
+            padding: 20px 0 40px 0;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .category-slider::-webkit-scrollbar {
+            display: none;
+        }
+
+        .category-item {
+            flex: 0 0 auto;
+            width: 300px;
+            scroll-snap-align: start;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .category-card {
+            position: relative;
+            height: 350px;
+            border-radius: 25px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            transition: all 0.4s ease;
+        }
+
+        .category-item:hover {
+            transform: translateY(-15px) scale(1.05);
+        }
+
+        .category-item:hover .category-card {
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .category-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            transition: all 0.4s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+        .category-item:hover .category-image {
+            transform: scale(1.1);
+            filter: brightness(1.1) saturate(1.2);
+        }
+
+        .category-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 250px;
+            background: linear-gradient(45deg, rgba(255,107,107,0.3), rgba(78,205,196,0.3));
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 2;
+            backdrop-filter: blur(5px);
+        }
+
+        .category-item:hover .category-overlay {
+            opacity: 1;
+        }
+
+        .category-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 25px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(255,255,255,0.85));
+            backdrop-filter: blur(20px);
+            z-index: 3;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+        }
+
+        .category-item:hover .category-content {
+            transform: translateY(0);
+            background: linear-gradient(135deg, rgba(255,255,255,1), rgba(255,255,255,0.95));
+        }
+
+        .category-name {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 8px;
+            position: relative;
+        }
+
+        .category-description {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s ease 0.1s;
+        }
+
+        .category-item:hover .category-description {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .glow-effect {
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            opacity: 0;
+            transform: scale(0.5);
+            transition: all 0.6s ease;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .category-item:hover .glow-effect {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .floating-particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .particle:nth-child(1) { left: 20%; animation-delay: 0s; }
+        .particle:nth-child(2) { left: 40%; animation-delay: 1s; }
+        .particle:nth-child(3) { left: 60%; animation-delay: 2s; }
+        .particle:nth-child(4) { left: 80%; animation-delay: 3s; }
+
+        @@keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0; }
+            50% { transform: translateY(-20px) rotate(180deg); opacity: 1; }
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 2rem;
+            animation: bounce 2s infinite;
+        }
+
+        @@keyframes bounce {
+            0%, 100% { transform: translateY(-50%) translateX(0); }
+            50% { transform: translateY(-50%) translateX(10px); }
+        }
+
+        @@media (max-width: 768px) {
+            .category-item {
+                width: 250px;
             }
-        </div>
-    </div>
-</section>
+            
+            .category-card {
+                height: 300px;
+            }
+            
+            .category-image {
+                height: 200px;
+            }
+            
+            .category-overlay {
+                height: 200px;
+            }
+            
+            .section-title h2 {
+                font-size: 2rem;
+            }
+            
+            .category-slider {
+                gap: 20px;
+            }
+        }
 
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
-
-@{
-    #region slider
-
-    @* <!-- New Arrivals Section -->
-<section class="new-arrivals-section">
+        @@media (max-width: 480px) {
+            .category-item {
+                width: 200px;
+            }
+            
+            .category-card {
+                height: 250px;
+            }
+            
+            .category-image {
+                height: 150px;
+            }
+            
+            .category-overlay {
+                height: 150px;
+            }
+        }
+    </style>
+    <section class="category-slider-section">
     <div class="container">
-        <div class="section-header">
-            <h2>New Arrivals</h2>
-            <p>The latest additions to our collection, featuring this season's must-have pieces.</p>
+        <div class="section-title">
+            <h2>Categories</h2>
         </div>
-
-        <div class="products-grid">
-            @if (ViewBag.NewArrivals != null)
+        <div class="category-slider">
+            @if (ViewBag.Categories != null)
             {
-                var newArrivals = ViewBag.NewArrivals as List<DAL.Data.Models.Product>;
-                if (newArrivals != null)
+                @foreach (var category in ViewBag.Categories as List<Category>)
                 {
-                    foreach (var product in newArrivals.Take(4))
-                    {
-                    <div class="product-card">
-                        <div class="product-image">
-cursor/fix-product-details-and-update-branding-fb72
-                            @if (product.IsNewArrival)
-                            {
-                                <span class="product-badge new">New</span>
-                            }
-                            @if (product.IsBestseller)
-                            {
-                                <span class="product-badge bestseller">Best Seller</span>
-                            }
-                            <img src="@(product.Images != null && product.Images.Count > 0 ? product.Images.First().ImageUrl : "/images/placeholder-dress.jpg")" 
-
-                            <span class="product-badge new">New</span>
-                                                            <img src="@(product.Images != null && product.Images.Count > 0 ? product.Images.First().ImageUrl : "/images/placeholder-dress.jpg")" 
- master
-                                 alt="@product.Name" 
-                                 onerror="this.src='/images/placeholder-dress.jpg'; this.onerror=null;" />
-                            <div class="product-overlay">
-                                <a href="@Url.Action("ProductDetails", "Shop", new { id = product.Id })" class="btn-view-details">
-                                    <i class="fas fa-eye"></i> View Details
-                                </a>
+                    <a href="@Url.Action("ProductsByCategory", "Shop", new { categoryId = category.Id })" class="category-item">
+                        <div class="category-card">
+                            <div class="glow-effect"></div>
+                            <div class="floating-particles">
+                                <div class="particle"></div>
+                                <div class="particle"></div>
+                                <div class="particle"></div>
+                                <div class="particle"></div>
                             </div>
-                        </div>
-                        <div class="product-info">
-                            <h3>@product.Name</h3>
-                            <p class="product-category">@(string.IsNullOrEmpty(product.Description) ? product.Category?.Name : product.Description)</p>
-                            <div class="product-price">
-                                @if (product.DiscountPrice.HasValue)
+                            <img src="@category.ImageUrl" alt="@category.Name" class="category-image" onerror="this.src='https://via.placeholder.com/400x300?text=@category.Name'">
+                            <div class="category-overlay"></div>
+                            <div class="category-content">
+                                <div class="category-name">@category.Name</div>
+                                @if (!string.IsNullOrEmpty(category.Description))
                                 {
-                                    <span class="price-current">$@product.DiscountPrice.Value.ToString("F2")</span>
-                                    <span class="price-original">$@product.OriginalPrice.ToString("F2")</span>
+                                    <div class="category-description">@category.Description</div>
                                 }
                                 else
                                 {
-                                    <span class="price-current">$@product.OriginalPrice.ToString("F2")</span>
+                                    <div class="category-description">«ﬂ ‘› „‰ Ã«  @category.Name «·„„Ì“…</div>
                                 }
                             </div>
                         </div>
-                    </div>
-                }
+                    </a>
                 }
             }
             else
             {
-                <!-- Placeholder products -->
-                <div class="product-card">
-                    <div class="product-image">
-                        <span class="product-badge new">New</span>
-                        <img src="/images/placeholder-dress.jpg" alt="Lace Detail Blouse" />
-                        <div class="product-overlay">
-                            <a href="#" class="btn btn-view">View Details</a>
+                <div class="category-item">
+                    <div class="category-card">
+                        <div class="glow-effect"></div>
+                        <div class="floating-particles">
+                            <div class="particle"></div>
+                            <div class="particle"></div>
+                            <div class="particle"></div>
+                            <div class="particle"></div>
                         </div>
-                    </div>
-                    <div class="product-info">
-                        <h3>Lace Detail Blouse</h3>
-                        <p class="product-category">Elegant white blouse with delicate lace details</p>
-                        <div class="product-price">
-                            <span class="price-current">$49.99</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="product-card">
-                    <div class="product-image">
-                        <span class="product-badge new">New</span>
-                        <img src="/images/placeholder-dress.jpg" alt="Floral Midi Dress" />
-                        <div class="product-overlay">
-                            <a href="#" class="btn btn-view">View Details</a>
-                        </div>
-                    </div>
-                    <div class="product-info">
-                        <h3>Floral Midi Dress</h3>
-                        <p class="product-category">Stunning floral pattern with flattering silhouette</p>
-                        <div class="product-price">
-                            <span class="price-current">$79.99</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="product-card">
-                    <div class="product-image">
-                        <span class="product-badge new">New</span>
-                        <img src="/images/placeholder-dress.jpg" alt="Wide Leg Trousers" />
-                        <div class="product-overlay">
-                            <a href="#" class="btn btn-view">View Details</a>
-                        </div>
-                    </div>
-                    <div class="product-info">
-                        <h3>Wide Leg Trousers</h3>
-                        <p class="product-category">High-waisted design with flowing silhouette</p>
-                        <div class="product-price">
-                            <span class="price-current">$65.99</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="product-card">
-                    <div class="product-image">
-                        <span class="product-badge new">New</span>
-                        <img src="/images/placeholder-dress.jpg" alt="Pearl Button Cardigan" />
-                        <div class="product-overlay">
-                            <a href="#" class="btn btn-view">View Details</a>
-                        </div>
-                    </div>
-                    <div class="product-info">
-                        <h3>Pearl Button Cardigan</h3>
-                        <p class="product-category">Soft knit with elegant pearl button details</p>
-                        <div class="product-price">
-                            <span class="price-current">$54.99</span>
+                        <img src="https://via.placeholder.com/400x300?text=·«+ ÊÃœ+›∆« " alt="No Categories" class="category-image">
+                        <div class="category-overlay"></div>
+                        <div class="category-content">
+                            <div class="category-name">No Categories Available</div>
+                            <div class="category-description">Categories will added soon</div>
                         </div>
                     </div>
                 </div>
             }
         </div>
-
-        <div class="section-footer">
-            <a href="@Url.Action("NewArrivals", "Shop")" class="btn btn-outline">View All New Arrivals</a>
-        </div>
+        <div class="scroll-indicator">?</div>
     </div>
 </section>
- *@
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    @* <div class="category-slider">
-    @foreach (var category in ViewBag.Categories)
-    {
-        <div class="category-item text-center">
-            <a asp-controller="Product" asp-action="CategoryProducts" asp-route-id="@category.Id">
-                <img src="@Url.Content("~/images/categories/" + category.ImageUrl)" alt="@category.Name" style="width: 150px; height: 150px; object-fit: cover;" />
-                <h5 class="mt-2">@category.Name</h5>
-            </a>
-        </div>
-    }
-</div>
-
-@section Scripts {
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
     <script>
-        $(document).ready(function () {
-            $('.category-slider').slick({
-                slidesToShow: 4,
-                slidesToScroll: 1,
-                autoplay: true,
-                autoplaySpeed: 3000,
-                arrows: true,
-                dots: false,
-                responsive: [
-                    {
-                        breakpoint: 768,
-                        settings: { slidesToShow: 2 }
-                    },
-                    {
-                        breakpoint: 480,
-                        settings: { slidesToShow: 1 }
-                    }
-                ]
+        document.querySelector('.category-slider').addEventListener('wheel', (e) => {
+            if (e.deltaY !== 0) {
+                e.preventDefault();
+                e.currentTarget.scrollLeft += e.deltaY > 0 ? 100 : -100;
+            }
+        });
+
+        document.querySelectorAll('.category-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const categoryName = this.querySelector('.category-name').textContent;
+                console.log(`Navigating to: ${categoryName}`);
             });
         });
+
+        let startX = 0;
+        let scrollLeft = 0;
+        const slider = document.querySelector('.category-slider');
+
+        slider.addEventListener('touchstart', (e) => {
+            startX = e.touches[0].pageX - slider.offsetLeft;
+            scrollLeft = slider.scrollLeft;
+        });
+
+        slider.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            const x = e.touches[0].pageX - slider.offsetLeft;
+            const walk = (x - startX) * 2;
+            slider.scrollLeft = scrollLeft - walk;
+        });
     </script>
-}
- *@
-    #endregion
-}
+
 
 <!-- New Arrivals Section -->
 

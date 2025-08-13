@@ -293,7 +293,7 @@
                         {
                             <div style="display: flex; align-items: center; padding: 15px 0; border-bottom: 1px solid #eee;">
                                 <div style="flex: 0 0 80px; margin-right: 15px;">
-                                    <img src="/images/products/@(item.Product?.Images?.FirstOrDefault()?.ImageUrl ?? "placeholder-dress.jpg")" 
+                                    <img src="@item.CoverImageUrl"
                                          alt="@item.Product?.Name" 
                                          style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px;" />
                                 </div>

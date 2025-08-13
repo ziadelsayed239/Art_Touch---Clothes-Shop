@@ -442,6 +442,7 @@ namespace Art_Touch.Controllers
                 .Include(o => o.User)
                 .Include(o => o.Items)
                 .ThenInclude(oi => oi.Product)
+                .ThenInclude(p => p.Images) 
                 .OrderByDescending(o => o.OrderDate)
                 .ToListAsync();
             return View(orders);

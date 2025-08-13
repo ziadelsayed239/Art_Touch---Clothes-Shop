@@ -35,6 +35,9 @@
                                         <th>Customer</th>
                                         <th>Date</th>
                                         <th>Status</th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
                                         <th>Total Amount</th>
                                         <th>Shipping Address</th>
                                         <th>Actions</th>
@@ -58,6 +61,20 @@
                                                     @order.Status
                                                 </span>
                                             </td>
+                                            @foreach(var item in order.Items)
+                                            {
+                                                <td>@item.Product.Name</td>
+                                                <td>@item.Size</td>
+                                                 <td>
+                                                @foreach(var image in item.Product.Images)
+                                                {
+
+                                                        <img src="@Url.Content(image.ImageUrl)" alt="@item.Product.Name" style="max-width: 100px; height: auto; margin: 5px;" />
+                                                    }
+                                                </td>
+
+
+                                            }
                                             <td>$@order.TotalAmount.ToString("F2")</td>
                                             <td>@order.ShippingAddress</td>
                                             <td>
